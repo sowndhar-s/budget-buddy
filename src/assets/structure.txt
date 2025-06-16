@@ -1,0 +1,24 @@
+├── src/
+│   ├── ExpenseTracker.tsx        # Main container component
+│   ├── types.ts                  # Shared type definitions
+│   ├── hooks/
+│   │   ├── useExpenses.ts        # Expense data fetching and management
+│   │   ├── useFilters.ts         # Filtering logic
+│   │   └── useChartData.ts       # Chart data preparation
+│   ├── views/
+│   │   ├── Dashboard.tsx         # Dashboard view
+│   │   ├── ExpensesList.tsx      # Expenses list view
+│   │   └── Analytics.tsx         # Analytics view
+│   ├── components/
+│   │   ├── Header.tsx            # App header with welcome message
+│   │   ├── QuickStats.tsx        # Stats cards component
+│   │   ├── Navigation.tsx        # View navigation component
+│   │   ├── PeriodSelector.tsx    # Time period selection controls
+│   │   ├── ExpenseForm.tsx       # Add/edit expense form
+│   │   └── charts/
+│   │       ├── TrendChart.tsx    # 7-day trend chart
+│   │       ├── MonthlyChart.tsx  # Monthly breakdown chart
+│   │       └── CategoryChart.tsx # Category breakdown chart
+│   └── utils/
+│       ├── formatters.ts         # Currency and date formatting
+│       └── exportData.ts         # CSV export functionality
