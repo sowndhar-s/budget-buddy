@@ -160,10 +160,10 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
 
   return (
     <div className="fixed inset-0 bg-gradient-to-br from-purple-900/80 via-blue-900/80 to-indigo-900/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-      <div className={`bg-white rounded-2xl shadow-2xl w-full max-w-xs transform transition-all duration-300 ${isShaking ? 'animate-bounce' : ''} relative overflow-hidden`}>
+      <div className={`bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[95vh] transform transition-all duration-300 ${isShaking ? 'animate-bounce' : ''} relative overflow-hidden flex flex-col`}>
         
         {/* Compact header */}
-        <div className="relative bg-gradient-to-r from-purple-600 via-pink-600 to-red-500 text-white p-3 overflow-hidden">
+        <div className="relative bg-gradient-to-r from-purple-600 via-pink-600 to-red-500 text-white p-3 overflow-hidden flex-shrink-0">
           <div 
             className="absolute inset-0 opacity-30"
             style={{
@@ -184,7 +184,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
               {editingExpense ? <Edit3 size={18} /> : <Sparkles size={18} />}
             </div>
             <div>
-              <h2 className="text-base font-bold">
+              <h2 className="text-lg font-bold">
                 {editingExpense ? "Edit Expense" : "New Expense 💸"}
               </h2>
               <p className="text-xs opacity-80">
@@ -194,138 +194,142 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
           </div>
         </div>
 
-        <div className="p-3 space-y-3">
-          {/* Compact Quick Buttons */}
-          {!editingExpense && (
-            <div className="space-y-2">
-              <p className="text-xs text-gray-600 text-center">🎯 Quick Add</p>
-              <div className="flex gap-1">
-                {commonExpenses.map((preset, index) => (
-                  <button
-                    key={index}
-                    type="button"
-                    onClick={() => handlePresetClick(preset)}
-                    className={`flex-1 bg-gradient-to-br ${preset.color} text-white rounded-xl p-2 transition-all hover:scale-105 active:scale-95 group relative overflow-hidden`}
-                    title={preset.hoverText}
-                  >
-                    <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl"></div>
-                    <div className="relative z-10">
-                      <div className="text-sm">{preset.emoji}</div>
-                      <div className="text-xs font-bold">{preset.label}</div>
-                      <div className="text-xs opacity-80">₹{preset.amount}</div>
-                    </div>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <form onSubmit={handleFormSubmit} className="space-y-3">
-            {/* Amount with reaction */}
-            <div className="relative">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                💰 Amount {getAmountReaction()}
-              </label>
-              <input
-                type="number"
-                step="0.01"
-                value={formData.amount}
-                onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-                className={`w-full p-2 text-xl font-bold text-center rounded-xl border-2 transition-all ${
-                  parseFloat(formData.amount) > 1000 
-                    ? 'border-red-300 bg-red-50 text-red-600' 
-                    : 'border-green-300 bg-green-50 text-green-600'
-                } focus:ring-2 focus:ring-purple-200 focus:border-purple-400`}
-                placeholder="₹0"
-                required
-              />
-            </div>
-
-            {/* Description */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                📝 What for?
-              </label>
-              <input
-                type="text"
-                value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                className="w-full p-2 rounded-xl border-2 border-gray-200 focus:ring-2 focus:ring-purple-200 focus:border-purple-400 transition-all text-sm"
-                placeholder="Coffee, lunch, etc..."
-                required
-              />
-            </div>
-
-            {/* Category & Date Row */}
-            <div className="grid grid-cols-2 gap-2">
-              <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">📂 Category</label>
-                <select
-                  value={formData.category}
-                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                  className="w-full p-2 rounded-xl border-2 border-gray-200 focus:ring-2 focus:ring-purple-200 focus:border-purple-400 transition-all text-sm"
-                  required
-                >
-                  <option value="">Pick one</option>
-                  {categories.map((cat) => (
-                    <option key={cat} value={cat}>{cat}</option>
+        {/* Scrollable content area */}
+        <div className="flex-1 overflow-y-auto">
+          <div className="p-3 space-y-3">
+            {/* Quick Buttons - Only show if not editing */}
+            {!editingExpense && (
+              <div className="space-y-2">
+                <p className="text-xs text-gray-600 text-center">🎯 Quick Add</p>
+                <div className="flex gap-1">
+                  {commonExpenses.map((preset, index) => (
+                    <button
+                      key={index}
+                      type="button"
+                      onClick={() => handlePresetClick(preset)}
+                      className={`flex-1 bg-gradient-to-br ${preset.color} text-white rounded-lg p-2 transition-all hover:scale-105 active:scale-95 group relative overflow-hidden`}
+                      title={preset.hoverText}
+                    >
+                      <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg"></div>
+                      <div className="relative z-10">
+                        <div className="text-sm">{preset.emoji}</div>
+                        <div className="text-xs font-bold">{preset.label}</div>
+                        <div className="text-xs opacity-80">₹{preset.amount}</div>
+                      </div>
+                    </button>
                   ))}
-                </select>
+                </div>
               </div>
-              <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">📅 Date</label>
+            )}
+
+            <form onSubmit={handleFormSubmit} className="space-y-3">
+              {/* Amount with reaction */}
+              <div className="relative">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  💰 Amount {getAmountReaction()}
+                </label>
                 <input
-                  type="date"
-                  value={formData.date}
-                  onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                  className="w-full p-2 rounded-xl border-2 border-gray-200 focus:ring-2 focus:ring-purple-200 focus:border-purple-400 transition-all text-sm"
+                  type="number"
+                  step="0.01"
+                  value={formData.amount}
+                  onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+                  className={`w-full p-2 text-lg font-bold text-center rounded-lg border-2 transition-all ${
+                    parseFloat(formData.amount) > 1000 
+                      ? 'border-red-300 bg-red-50 text-red-600' 
+                      : 'border-green-300 bg-green-50 text-green-600'
+                  } focus:ring-2 focus:ring-purple-200 focus:border-purple-400`}
+                  placeholder="₹0"
                   required
                 />
               </div>
-            </div>
 
-            {/* Payment Method - Compact Pills */}
-            <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">💳 Payment</label>
-              <div className="grid grid-cols-4 gap-1">
-                {paymentMethods.map((method) => (
-                  <button
-                    key={method.value}
-                    type="button"
-                    onClick={() => setFormData({ ...formData, paymentMethod: method.value })}
-                    className={`p-2 rounded-lg border-2 text-xs font-medium transition-all hover:scale-105 ${
-                      formData.paymentMethod === method.value
-                        ? 'bg-purple-500 text-white border-purple-500 shadow-md'
-                        : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'
-                    }`}
-                  >
-                    <div className="text-sm">{method.emoji}</div>
-                    <div className="font-bold">{method.label}</div>
-                  </button>
-                ))}
+              {/* Description */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  📝 What for?
+                </label>
+                <input
+                  type="text"
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  className="w-full p-2 rounded-lg border-2 border-gray-200 focus:ring-2 focus:ring-purple-200 focus:border-purple-400 transition-all text-sm"
+                  placeholder="Coffee, lunch, etc..."
+                  required
+                />
               </div>
-            </div>
 
-            {/* Action Buttons */}
-            <div className="flex gap-2 pt-1">
-              <button
-                type="button"
-                onClick={handleClose}
-                className="flex-1 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-xl transition-all font-medium hover:scale-105 active:scale-95 text-sm"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="flex-1 py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-xl transition-all font-medium shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 relative overflow-hidden group text-sm"
-              >
-                <span className="relative z-10">
-                  {editingExpense ? "🔧 Update" : "💸 Add Expense"}
-                </span>
-                <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-              </button>
-            </div>
-          </form>
+              {/* Category & Date Row */}
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">📂 Category</label>
+                  <select
+                    value={formData.category}
+                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                    className="w-full p-2 rounded-lg border-2 border-gray-200 focus:ring-2 focus:ring-purple-200 focus:border-purple-400 transition-all text-sm"
+                    required
+                  >
+                    <option value="">Pick one</option>
+                    {categories.map((cat) => (
+                      <option key={cat} value={cat}>{cat}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">📅 Date</label>
+                  <input
+                    type="date"
+                    value={formData.date}
+                    onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                    className="w-full p-2 rounded-lg border-2 border-gray-200 focus:ring-2 focus:ring-purple-200 focus:border-purple-400 transition-all text-sm"
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Payment Method - Compact Pills */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">💳 Payment</label>
+                <div className="grid grid-cols-4 gap-1">
+                  {paymentMethods.map((method) => (
+                    <button
+                      key={method.value}
+                      type="button"
+                      onClick={() => setFormData({ ...formData, paymentMethod: method.value })}
+                      className={`p-2 rounded-lg border-2 text-xs font-medium transition-all hover:scale-105 ${
+                        formData.paymentMethod === method.value
+                          ? 'bg-purple-500 text-white border-purple-500 shadow-md'
+                          : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'
+                      }`}
+                    >
+                      <div className="text-sm mb-1">{method.emoji}</div>
+                      <div className="font-bold">{method.label}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        {/* Fixed Action Buttons at bottom */}
+        <div className="flex gap-2 p-3 bg-gray-50 border-t flex-shrink-0">
+          <button
+            type="button"
+            onClick={handleClose}
+            className="flex-1 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg transition-all font-medium hover:scale-105 active:scale-95 text-sm"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            onClick={handleFormSubmit}
+            className="flex-1 py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg transition-all font-medium shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 relative overflow-hidden group text-sm"
+          >
+            <span className="relative z-10">
+              {editingExpense ? "🔧 Update" : "💸 Add Expense"}
+            </span>
+            <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          </button>
         </div>
       </div>
     </div>
