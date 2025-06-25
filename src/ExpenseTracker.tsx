@@ -64,7 +64,7 @@ const ExpenseTracker: React.FC<Props> = ({ user, onLogout }) => {
     if (viewMode === "monthly") {
       return filteredExpenses.filter(expense => {
         const expenseDate = new Date(expense.date);
-        return expenseDate.getMonth() === selectedMonth && 
+        return expenseDate.getMonth() === selectedMonth &&
                expenseDate.getFullYear() === selectedYear;
       });
     } else {

@@ -69,8 +69,8 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
       
       // Show different confetti for expensive items
       confetti({
-        particleCount: 150,
-        spread: 100,
+        particleCount: 100,
+        spread: 70,
         origin: { y: 0.6 },
         colors: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7']
       });
@@ -80,8 +80,8 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
     } else {
       // Normal confetti for regular expenses
       confetti({
-        particleCount: 80,
-        spread: 60,
+        particleCount: 60,
+        spread: 50,
         origin: { y: 0.7 },
         colors: ['#10B981', '#3B82F6', '#8B5CF6', '#F59E0B']
       });
@@ -134,7 +134,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
     
     // Mini confetti for preset clicks
     confetti({
-      particleCount: 30,
+      particleCount: 20,
       spread: 30,
       origin: { y: 0.8 },
       colors: ['#FFE66D', '#FF6B6B', '#4ECDC4']
@@ -159,8 +159,13 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-purple-900/80 via-blue-900/80 to-indigo-900/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-      <div className={`bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[95vh] transform transition-all duration-300 ${isShaking ? 'animate-bounce' : ''} relative overflow-hidden flex flex-col`}>
+    <div className="fixed inset-0 bg-gradient-to-br from-purple-900/80 via-blue-900/80 to-indigo-900/80 backdrop-blur-sm flex items-center justify-center p-2 z-50">
+      {/* Reduced width modal */}
+      <div className={`
+        bg-white w-full max-w-sm h-auto max-h-[90vh] rounded-2xl shadow-2xl
+        transform transition-all duration-300 ${isShaking ? 'animate-bounce' : ''} 
+        relative overflow-hidden flex flex-col
+      `}>
         
         {/* Compact header */}
         <div className="relative bg-gradient-to-r from-purple-600 via-pink-600 to-red-500 text-white p-3 overflow-hidden flex-shrink-0">
@@ -173,18 +178,18 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
           
           <button
             onClick={handleClose}
-            className="absolute top-2 right-2 p-1 rounded-full hover:bg-white/20 transition-all hover:rotate-90"
+            className="absolute top-2 right-2 p-1.5 rounded-full hover:bg-white/20 transition-all hover:rotate-90 touch-manipulation"
             title="Close"
           >
             <X size={16} />
           </button>
           
-          <div className="flex items-center gap-2 relative z-10">
+          <div className="flex items-center gap-2 relative z-10 pr-10">
             <div className="animate-pulse">
               {editingExpense ? <Edit3 size={18} /> : <Sparkles size={18} />}
             </div>
             <div>
-              <h2 className="text-lg font-bold">
+              <h2 className="text-base font-bold">
                 {editingExpense ? "Edit Expense" : "New Expense 💸"}
               </h2>
               <p className="text-xs opacity-80">
@@ -195,26 +200,26 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
         </div>
 
         {/* Scrollable content area */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto scrollbar-hide">
           <div className="p-3 space-y-3">
             {/* Quick Buttons - Only show if not editing */}
             {!editingExpense && (
               <div className="space-y-2">
-                <p className="text-xs text-gray-600 text-center">🎯 Quick Add</p>
-                <div className="flex gap-1">
+                <p className="text-xs text-gray-600 text-center font-medium">🎯 Quick Add</p>
+                <div className="grid grid-cols-3 gap-1.5">
                   {commonExpenses.map((preset, index) => (
                     <button
                       key={index}
                       type="button"
                       onClick={() => handlePresetClick(preset)}
-                      className={`flex-1 bg-gradient-to-br ${preset.color} text-white rounded-lg p-2 transition-all hover:scale-105 active:scale-95 group relative overflow-hidden`}
+                      className={`bg-gradient-to-br ${preset.color} text-white rounded-lg p-2 transition-all hover:scale-105 active:scale-95 group relative overflow-hidden touch-manipulation`}
                       title={preset.hoverText}
                     >
                       <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg"></div>
                       <div className="relative z-10">
-                        <div className="text-sm">{preset.emoji}</div>
+                        <div className="text-sm mb-1">{preset.emoji}</div>
                         <div className="text-xs font-bold">{preset.label}</div>
-                        <div className="text-xs opacity-80">₹{preset.amount}</div>
+                        <div className="text-xs opacity-90">₹{preset.amount}</div>
                       </div>
                     </button>
                   ))}
@@ -222,7 +227,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
               </div>
             )}
 
-            <form onSubmit={handleFormSubmit} className="space-y-3">
+            <form onSubmit={handleFormSubmit} className="space-y-3" id="expense-form">
               {/* Amount with reaction */}
               <div className="relative">
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -233,7 +238,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
                   step="0.01"
                   value={formData.amount}
                   onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
-                  className={`w-full p-2 text-lg font-bold text-center rounded-lg border-2 transition-all ${
+                  className={`w-full p-3 text-lg font-bold text-center rounded-lg border-2 transition-all touch-manipulation ${
                     parseFloat(formData.amount) > 1000 
                       ? 'border-red-300 bg-red-50 text-red-600' 
                       : 'border-green-300 bg-green-50 text-green-600'
@@ -252,7 +257,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
                   type="text"
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full p-2 rounded-lg border-2 border-gray-200 focus:ring-2 focus:ring-purple-200 focus:border-purple-400 transition-all text-sm"
+                  className="w-full p-2.5 rounded-lg border-2 border-gray-200 focus:ring-2 focus:ring-purple-200 focus:border-purple-400 transition-all touch-manipulation text-sm"
                   placeholder="Coffee, lunch, etc..."
                   required
                 />
@@ -265,7 +270,7 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
                   <select
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    className="w-full p-2 rounded-lg border-2 border-gray-200 focus:ring-2 focus:ring-purple-200 focus:border-purple-400 transition-all text-sm"
+                    className="w-full p-2.5 rounded-lg border-2 border-gray-200 focus:ring-2 focus:ring-purple-200 focus:border-purple-400 transition-all touch-manipulation text-sm"
                     required
                   >
                     <option value="">Pick one</option>
@@ -280,22 +285,22 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
                     type="date"
                     value={formData.date}
                     onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                    className="w-full p-2 rounded-lg border-2 border-gray-200 focus:ring-2 focus:ring-purple-200 focus:border-purple-400 transition-all text-sm"
+                    className="w-full p-2.5 rounded-lg border-2 border-gray-200 focus:ring-2 focus:ring-purple-200 focus:border-purple-400 transition-all touch-manipulation text-sm"
                     required
                   />
                 </div>
               </div>
 
-              {/* Payment Method - Compact Pills */}
+              {/* Payment Method - Compact Grid */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">💳 Payment</label>
-                <div className="grid grid-cols-4 gap-1">
+                <div className="grid grid-cols-4 gap-1.5">
                   {paymentMethods.map((method) => (
                     <button
                       key={method.value}
                       type="button"
                       onClick={() => setFormData({ ...formData, paymentMethod: method.value })}
-                      className={`p-2 rounded-lg border-2 text-xs font-medium transition-all hover:scale-105 ${
+                      className={`p-2 rounded-lg border-2 text-xs font-medium transition-all hover:scale-105 active:scale-95 touch-manipulation ${
                         formData.paymentMethod === method.value
                           ? 'bg-purple-500 text-white border-purple-500 shadow-md'
                           : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'
@@ -316,14 +321,14 @@ const ExpenseForm: React.FC<ExpenseFormProps> = ({
           <button
             type="button"
             onClick={handleClose}
-            className="flex-1 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg transition-all font-medium hover:scale-105 active:scale-95 text-sm"
+            className="flex-1 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg transition-all font-medium hover:scale-105 active:scale-95 touch-manipulation text-sm"
           >
             Cancel
           </button>
           <button
             type="submit"
-            onClick={handleFormSubmit}
-            className="flex-1 py-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg transition-all font-medium shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 relative overflow-hidden group text-sm"
+            form="expense-form"
+            className="flex-1 py-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-lg transition-all font-medium shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 relative overflow-hidden group touch-manipulation text-sm"
           >
             <span className="relative z-10">
               {editingExpense ? "🔧 Update" : "💸 Add Expense"}

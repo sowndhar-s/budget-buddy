@@ -30,42 +30,42 @@ export const Header: React.FC<HeaderProps> = ({ user, onAddExpense, onLogout }) 
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-      {/* Single row with title, welcome message, and buttons */}
-      <div className="flex justify-between items-center">
+    <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-8">
+      {/* Single row layout - same as original but responsive */}
+      <div className="flex justify-between items-center gap-2 md:gap-4">
         {/* Left: Title */}
-        <div>
-          <h1 className="text-3xl font-bold text-gray-800">
+        <div className="flex-shrink-0">
+          <h1 className="text-xl md:text-3xl font-bold text-gray-800">
             Budget Buddy 💰
           </h1>
-          <p className="text-gray-600 text-sm mt-1">
+          <p className="text-gray-600 text-xs md:text-sm mt-1 hidden sm:block">
             Track every penny, master your money
           </p>
         </div>
 
-        {/* Center: Welcome Message */}
-        <div className="flex-1 mx-8 text-center">
+        {/* Center: Welcome Message - hidden on small screens */}
+        <div className="flex-1 text-center hidden lg:block">
           <p className="text-lg font-medium text-gray-700">
             {getGreeting()}
           </p>
         </div>
 
         {/* Right: Buttons */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 flex-shrink-0">
           <button
             onClick={onAddExpense}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg flex items-center gap-2 transition-colors"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 md:px-6 md:py-3 rounded-lg flex items-center gap-1 md:gap-2 transition-colors text-sm md:text-base"
           >
-            <PlusCircle size={20} />
-            Add Expense
+            <PlusCircle size={18} className="md:w-5 md:h-5" />
+            <span className="hidden sm:inline">Add Expense</span>
           </button>
           <button
             onClick={onLogout}
-            className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-3 rounded-lg flex items-center gap-2 transition-colors"
+            className="bg-gray-600 hover:bg-gray-700 text-white px-3 py-2 md:px-4 md:py-3 rounded-lg flex items-center gap-1 md:gap-2 transition-colors"
             title="Logout"
           >
-            <LogOut size={20} />
-            Logout
+            <LogOut size={18} className="md:w-5 md:h-5" />
+            <span className="hidden md:inline">Logout</span>
           </button>
         </div>
       </div>

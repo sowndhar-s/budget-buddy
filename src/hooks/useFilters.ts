@@ -4,7 +4,7 @@ import type { Expense, Filters } from '../types';
 export const useFilters = (expenses: Expense[]) => {
   const [filters, setFilters] = useState<Filters>({
     category: "",
-    dateRange: "all",
+    dateRange: "month",
     minAmount: "",
     maxAmount: "",
     searchTerm: "",

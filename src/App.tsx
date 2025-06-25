@@ -9,7 +9,7 @@ import './index.css';
 
 const AUTH_STORAGE_KEY = 'budget_buddy_pin_verified';
 
-const App = () => {
+const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [firebaseUser, setFirebaseUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
