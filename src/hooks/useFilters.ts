@@ -4,7 +4,6 @@ import type { Expense, Filters } from '../types';
 export const useFilters = (expenses: Expense[]) => {
   const [filters, setFilters] = useState<Filters>({
     category: "",
-    dateRange: "all",
     minAmount: "",
     maxAmount: "",
     searchTerm: "",
@@ -24,28 +23,6 @@ export const useFilters = (expenses: Expense[]) => {
           .includes(filters.searchTerm.toLowerCase())
       )
         return false;
-
-      // Date range filter
-      const expenseDate = new Date(expense.date);
-      const now = new Date();
-
-      if (filters.dateRange === "week") {
-        const weekAgo = new Date();
-        weekAgo.setDate(now.getDate() - 7);
-        if (expenseDate < weekAgo) return false;
-      }
-
-      if (filters.dateRange === "month") {
-        const monthAgo = new Date();
-        monthAgo.setMonth(now.getMonth() - 1);
-        if (expenseDate < monthAgo) return false;
-      }
-
-      if (filters.dateRange === "year") {
-        const yearAgo = new Date();
-        yearAgo.setFullYear(now.getFullYear() - 1);
-        if (expenseDate < yearAgo) return false;
-      }
 
       // Min amount filter
       if (filters.minAmount && expense.amount < parseFloat(filters.minAmount))

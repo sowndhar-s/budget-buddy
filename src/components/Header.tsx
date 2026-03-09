@@ -30,9 +30,7 @@ export const Header: React.FC<HeaderProps> = ({ user, onAddExpense, onLogout }) 
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-8">
-      {/* Single row layout - same as original but responsive */}
-      <div className="flex justify-between items-center gap-2 md:gap-4">
+    <div className="flex justify-between items-center gap-2 md:gap-4 mb-6">
         {/* Left: Title */}
         <div className="flex-shrink-0">
           <h1 className="text-xl md:text-3xl font-bold text-gray-800">
@@ -69,6 +67,5 @@ export const Header: React.FC<HeaderProps> = ({ user, onAddExpense, onLogout }) 
           </button>
         </div>
       </div>
-    </div>
   );
 };

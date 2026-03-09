@@ -9,9 +9,6 @@ import {
   Tooltip,
   LineChart,
   Line,
-  PieChart,
-  Pie,
-  Cell,
 } from "recharts";
 import { TrendingUp, TrendingDown, Target, IndianRupee } from "lucide-react";
 import type { Expense } from "../types";
@@ -55,20 +52,6 @@ const Analytics: React.FC<AnalyticsProps> = ({
     return { trend: "neutral", percentage: 0 };
   }, [viewMode, monthlyData]);
 
-  // Calculate payment method breakdown
-  const paymentMethodData = React.useMemo(() => {
-    const paymentMethods: { [key: string]: number } = {};
-    currentExpenses.forEach((expense) => {
-      paymentMethods[expense.paymentMethod] = 
-        (paymentMethods[expense.paymentMethod] || 0) + expense.amount;
-    });
-    
-    return Object.entries(paymentMethods).map(([method, amount]) => ({
-      name: method.charAt(0).toUpperCase() + method.slice(1),
-      value: amount,
-    }));
-  }, [currentExpenses]);
-
   // Calculate daily/weekly averages
   const averages = React.useMemo(() => {
     if (currentExpenses.length === 0) {
@@ -105,60 +88,55 @@ const Analytics: React.FC<AnalyticsProps> = ({
       }));
   }, [currentExpenses]);
 
-  // const monthNames = [
-  //   "January", "February", "March", "April", "May", "June",
-  //   "July", "August", "September", "October", "November", "December"
-  // ];
-
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Analytics Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <div className="flex items-center justify-between mb-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="bg-white rounded-xl shadow-lg p-4 md:p-6">
+          <div className="flex items-center justify-between mb-3">
             <div>
-              <p className="text-gray-600 text-sm">Daily Average</p>
-              <p className="text-2xl font-bold">₹{averages.daily.toFixed(2)}</p>
+              <p className="text-gray-600 text-xs md:text-sm">Daily Average</p>
+              <p className="text-xl md:text-2xl font-bold">₹{averages.daily.toFixed(0)}</p>
             </div>
-            <IndianRupee className="text-blue-500" size={32} />
+            <IndianRupee className="text-blue-500 flex-shrink-0" size={28} />
           </div>
-          <div className="text-sm text-gray-500">
+          <div className="text-xs text-gray-500">
             Based on {viewMode === "monthly" ? "current month" : "current year"}
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <div className="flex items-center justify-between mb-4">
+        <div className="bg-white rounded-xl shadow-lg p-4 md:p-6">
+          <div className="flex items-center justify-between mb-3">
             <div>
-              <p className="text-gray-600 text-sm">Weekly Average</p>
-              <p className="text-2xl font-bold">₹{averages.weekly.toFixed(2)}</p>
+              <p className="text-gray-600 text-xs md:text-sm">Weekly Average</p>
+              <p className="text-xl md:text-2xl font-bold">₹{averages.weekly.toFixed(0)}</p>
             </div>
-            <Target className="text-green-500" size={32} />
+            <Target className="text-green-500 flex-shrink-0" size={28} />
           </div>
-          <div className="text-sm text-gray-500">
+          <div className="text-xs text-gray-500">
             Projected weekly spending
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <div className="flex items-center justify-between mb-4">
+        <div className="bg-white rounded-xl shadow-lg p-4 md:p-6">
+          <div className="flex items-center justify-between mb-3">
             <div>
-              <p className="text-gray-600 text-sm">Spending Trend</p>
-              <div className="flex items-center gap-2">
+              <p className="text-gray-600 text-xs md:text-sm">Spending Trend</p>
+              <div className="flex items-center gap-1">
                 {spendingTrend.trend === "up" ? (
-                  <TrendingUp className="text-red-500" size={20} />
+                  <TrendingUp className="text-red-500" size={18} />
                 ) : spendingTrend.trend === "down" ? (
-                  <TrendingDown className="text-green-500" size={20} />
+                  <TrendingDown className="text-green-500" size={18} />
                 ) : (
-                  <div className="w-5 h-5 bg-gray-300 rounded-full" />
+                  <div className="w-4 h-4 bg-gray-300 rounded-full" />
                 )}
-                <span className="text-xl font-bold">
+                <span className="text-xl md:text-2xl font-bold">
                   {spendingTrend.percentage.toFixed(1)}%
                 </span>
               </div>
             </div>
           </div>
-          <div className="text-sm text-gray-500">
+          <div className="text-xs text-gray-500">
             {spendingTrend.trend === "up" 
               ? "Increased spending" 
               : spendingTrend.trend === "down" 
@@ -167,40 +145,41 @@ const Analytics: React.FC<AnalyticsProps> = ({
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <div className="flex items-center justify-between mb-4">
+        <div className="bg-white rounded-xl shadow-lg p-4 md:p-6">
+          <div className="flex items-center justify-between mb-3">
             <div>
-              <p className="text-gray-600 text-sm">Transactions</p>
-              <p className="text-2xl font-bold">{currentExpenses.length}</p>
+              <p className="text-gray-600 text-xs md:text-sm">Transactions</p>
+              <p className="text-xl md:text-2xl font-bold">{currentExpenses.length}</p>
             </div>
-            <div className="text-blue-500 text-2xl">📊</div>
+            <div className="text-blue-500 text-2xl flex-shrink-0">📊</div>
           </div>
-          <div className="text-sm text-gray-500">
+          <div className="text-xs text-gray-500">
             Total transactions
           </div>
         </div>
       </div>
 
       {/* Charts Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Category Comparison */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <h3 className="text-xl font-bold mb-4">Category Comparison</h3>
+        <div className="bg-white rounded-xl shadow-lg p-4 md:p-6">
+          <h3 className="text-lg md:text-xl font-bold mb-4">Category Comparison</h3>
           {categoryData.length > 0 ? (
             <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={categoryData}>
+              <BarChart data={categoryData} margin={{ bottom: 60 }}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis 
                   dataKey="name" 
-                  angle={-45}
+                  angle={-35}
                   textAnchor="end"
-                  height={100}
+                  tick={{ fontSize: 11 }}
+                  interval={0}
                 />
-                <YAxis />
+                <YAxis tick={{ fontSize: 11 }} />
                 <Tooltip
                   formatter={(value: number) => `₹${value.toFixed(2)}`}
                 />
-                <Bar dataKey="value" fill="#8884d8" />
+                <Bar dataKey="value" fill="#8884d8" radius={[3, 3, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           ) : (
@@ -210,113 +189,80 @@ const Analytics: React.FC<AnalyticsProps> = ({
           )}
         </div>
 
-        {/* Payment Method Breakdown */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <h3 className="text-xl font-bold mb-4">Payment Methods</h3>
-          {paymentMethodData.length > 0 ? (
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={paymentMethodData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={60}
-                  outerRadius={120}
-                  dataKey="value"
-                  label={({ name, percent }: { name: string; percent: number }) => 
-                    `${name} ${(percent * 100).toFixed(0)}%`
-                  }
-                >
-                  {paymentMethodData.map((_, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={colors[index % colors.length]}
-                    />
-                  ))}
-                </Pie>
-                <Tooltip
-                  formatter={(value: number) => `₹${value.toFixed(2)}`}
-                />
-              </PieChart>
-            </ResponsiveContainer>
-          ) : (
-            <div className="flex items-center justify-center h-64 text-gray-500">
-              No payment data available
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Detailed Analytics */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Top Spending Categories */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <h3 className="text-xl font-bold mb-4">Top Spending Categories</h3>
-          <div className="space-y-4">
-            {categoryData
-              .sort((a, b) => b.value - a.value)
-              .slice(0, 5)
-              .map((category, index) => (
-                <div
-                  key={category.name}
-                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
-                >
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="w-4 h-4 rounded-full"
-                      style={{ backgroundColor: colors[index % colors.length] }}
-                    />
-                    <span className="font-medium">{category.name}</span>
-                  </div>
-                  <div className="text-right">
-                    <div className="font-bold">₹{category.value.toFixed(2)}</div>
-                    <div className="text-sm text-gray-600">
-                      {totalExpenses > 0 ? 
-                        ((category.value / totalExpenses) * 100).toFixed(1) : 0}%
+        <div className="bg-white rounded-xl shadow-lg p-4 md:p-6">
+          <h3 className="text-lg md:text-xl font-bold mb-4">Top Spending Categories</h3>
+          <div className="space-y-3">
+            {categoryData.length > 0 ? (
+              categoryData
+                .sort((a, b) => b.value - a.value)
+                .slice(0, 5)
+                .map((category, index) => (
+                  <div
+                    key={category.name}
+                    className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div
+                        className="w-3 h-3 rounded-full flex-shrink-0"
+                        style={{ backgroundColor: colors[index % colors.length] }}
+                      />
+                      <span className="font-medium text-sm">{category.name}</span>
+                    </div>
+                    <div className="text-right">
+                      <div className="font-bold text-sm">₹{category.value.toFixed(2)}</div>
+                      <div className="text-xs text-gray-500">
+                        {totalExpenses > 0 ? 
+                          ((category.value / totalExpenses) * 100).toFixed(1) : 0}%
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-          </div>
-        </div>
-
-        {/* Top Spending Days */}
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <h3 className="text-xl font-bold mb-4">Highest Spending Days</h3>
-          <div className="space-y-4">
-            {topSpendingDays.length > 0 ? (
-              topSpendingDays.map((day, index) => (
-                <div
-                  key={day.date}
-                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-sm font-bold">
-                      {index + 1}
-                    </div>
-                    <span className="font-medium">{day.date}</span>
-                  </div>
-                  <div className="font-bold">₹{day.amount.toFixed(2)}</div>
-                </div>
-              ))
+                ))
             ) : (
-              <div className="text-center py-4 text-gray-500">
-                No spending data available
+              <div className="text-center py-4 text-gray-500 text-sm">
+                No category data available
               </div>
             )}
           </div>
         </div>
       </div>
 
+      {/* Highest Spending Days */}
+      <div className="bg-white rounded-xl shadow-lg p-4 md:p-6">
+        <h3 className="text-lg md:text-xl font-bold mb-4">Highest Spending Days</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+          {topSpendingDays.length > 0 ? (
+            topSpendingDays.map((day, index) => (
+              <div
+                key={day.date}
+                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+              >
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 bg-blue-100 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">
+                    {index + 1}
+                  </div>
+                  <span className="font-medium text-sm">{day.date}</span>
+                </div>
+                <div className="font-bold text-sm">₹{day.amount.toFixed(0)}</div>
+              </div>
+            ))
+          ) : (
+            <div className="col-span-full text-center py-4 text-gray-500 text-sm">
+              No spending data available
+            </div>
+          )}
+        </div>
+      </div>
+
       {/* Monthly Trend (for yearly view) */}
       {viewMode === "yearly" && monthlyData.length > 0 && (
-        <div className="bg-white rounded-xl shadow-lg p-6">
-          <h3 className="text-xl font-bold mb-4">Monthly Spending Trend - {selectedYear}</h3>
+        <div className="bg-white rounded-xl shadow-lg p-4 md:p-6">
+          <h3 className="text-lg md:text-xl font-bold mb-4">Monthly Spending Trend – {selectedYear}</h3>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={monthlyData}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis />
+              <XAxis dataKey="month" tick={{ fontSize: 11 }} />
+              <YAxis tick={{ fontSize: 11 }} />
               <Tooltip
                 formatter={(value: number) => `₹${value.toFixed(2)}`}
               />

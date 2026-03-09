@@ -130,7 +130,7 @@ const ExpenseTracker: React.FC<Props> = ({ user, onLogout }) => {
 
   // Handle export
   const handleExport = () => {
-    exportExpensesToCSV(filteredExpenses);
+    exportExpensesToCSV(currentExpenses);
   };
 
   if (loading) {
@@ -143,7 +143,7 @@ const ExpenseTracker: React.FC<Props> = ({ user, onLogout }) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-3 sm:px-4 py-4 md:py-8">
         {/* Error Display */}
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
@@ -158,7 +158,7 @@ const ExpenseTracker: React.FC<Props> = ({ user, onLogout }) => {
         )}
 
         {/* Header Section */}
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+        <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-6">
           <Header
             user={user}
             onAddExpense={() => setShowAddForm(true)}
@@ -213,14 +213,13 @@ const ExpenseTracker: React.FC<Props> = ({ user, onLogout }) => {
             monthlyData={monthlyData}
             trendData={trendData}
             categoryData={categoryData}
-            currentExpenses={currentExpenses}
             colors={["#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#a4de6c"]}
           />
         )}
 
         {currentView === "expenses" && (
           <ExpensesList
-            filteredExpenses={filteredExpenses}
+            currentExpenses={currentExpenses}
             categories={categories}
             filters={filters}
             setFilters={setFilters}
