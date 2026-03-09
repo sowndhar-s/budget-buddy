@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { db } from "../firebase/firebase";
 import {
   collection,
@@ -32,10 +32,16 @@ export const useExpenses = (userId: string) => {
     "Other",
   ];
 
-  // Calculate available years for filtering
-  const availableYears = expenses.length > 0
-    ? [...new Set(expenses.map(exp => new Date(exp.date).getFullYear()))].sort((a, b) => b - a)
-    : [new Date().getFullYear()];
+  // Calculate available years for filtering (from earliest expense year to current year)
+  const availableYears = useMemo(() => {
+    const currentYear = new Date().getFullYear();
+    const expenseYears = expenses.map(exp => new Date(exp.date).getFullYear());
+    const minYear = expenseYears.length > 0 ? Math.min(...expenseYears) : currentYear;
+    return Array.from(
+      { length: currentYear - minYear + 1 },
+      (_, i) => currentYear - i
+    );
+  }, [expenses]);
 
   // Load expenses from Firestore
   useEffect(() => {
