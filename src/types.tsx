@@ -16,7 +16,6 @@ export type CurrentView = "dashboard" | "expenses" | "analytics";
 
 export interface Filters {
   category: string;
-  dateRange: string;
   minAmount: string;
   maxAmount: string;
   searchTerm: string;
